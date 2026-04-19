@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Dashboard</a>
+        <div>
+            <button onclick="window.print()" class="btn btn-primary btn-sm"><i class="bi bi-printer"></i> Print Certificate</button>
+            <a href="{{ url_for('download_txt_report', audit_id=audit.id) }}" class="btn btn-accent btn-sm ms-2"><i class="bi bi-download"></i> TXT Format</a>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center pb-5" id="certificate-print-area">
+    <div class="col-lg-10">
+        <div class="glass-card p-5 position-relative overflow-hidden">
+            <!-- Decorative badge -->
+            <div class="cert-watermark position-absolute opacity-25" style="top: -20px; right: -20px;">
+                <i class="bi bi-award-fill text-muted" style="font-size: 15rem;"></i>
+            </div>
+            
+            <div class="text-center mb-5 position-relative z-1">
+                <h1 class="brand-font mb-0 text-white"><i class="bi bi-bezier2 text-accent"></i> EcoThread</h1>
+                <h3 class="text-uppercase text-secondary mt-2 border-bottom border-secondary pb-3 d-inline-block">Compliance Certificate</h3>
+                <p class="mt-3 text-muted">Verification ID: <span class="font-monospace text-light">{{ audit.id }}</span></p>
+            </div>
+
+            <!-- Overall Status -->
+            <div class="row mb-5 position-relative z-1">
+                <div class="col-12">
+                    <div class="p-4 rounded text-center {% if audit.overall_status == 'Eco-Certified' %}bg-success-subtle border-success{% else %}bg-danger-subtle border-danger{% endif %} border border-opacity-50">
+                        <h2 class="mb-0 fw-bold {% if audit.overall_status == 'Eco-Certified' %}text-success{% else %}text-danger{% endif %}">
+                            {{ audit.overall_status | upper }}
+                        </h2>
+                        <p class="mb-0 mt-2 small text-muted">Audited on: {{ audit.timestamp }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout for Details -->
+            <div class="row g-5 position-relative z-1">
+                <!-- Sustainability -->
+                <div class="col-md-6 border-end border-secondary">
+                    <h5 class="text-accent mb-4"><i class="bi bi-tree"></i> Environmental Footprint</h5>
+                    
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3 d-flex justify-content-between border-bottom border-secondary pb-2">
+                            <span class="text-muted">Batch Profile</span>
+                            <span class="fw-bold">{{ audit.fiber }}</span>
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between border-bottom border-secondary pb-2">
+                            <span class="text-muted">Volume</span>
+                            <span class="fw-bold">{{ audit.volume_kg }} kg</span>
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between border-bottom border-secondary pb-2">
+                            <span class="text-muted">Water Consumption</span>
+                            <span class="fw-bold">{{ audit.footprint.water_metrics.total_liters }} L</span>
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between border-bottom border-secondary pb-2">
+                            <span class="text-muted">Carbon Emissions</span>
+                            <span class="fw-bold">{{ audit.footprint.carbon_metrics.total_kgCO2e }} kgCO2e</span>
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between border-bottom border-secondary pb-2">
+                            <span class="text-muted">Energy Utilization</span>
+                            <span class="fw-bold">{{ audit.footprint.energy_kwh }} kWh</span>
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between">
+                            <span class="text-muted">Microplastic Risk</span>
+                            <span class="fw-bold">{{ audit.footprint.materials.microplastic_risk }}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Chemicals -->
+                <div class="col-md-6">
+                    <h5 class="text-accent mb-4"><i class="bi bi-droplet-half"></i> Toxicological Analysis</h5>
+                    
+                    {% if audit.chemical_audit.details|length == 0 %}
+                        <p class="text-muted font-italic">No chemical lab results provided for this batch.</p>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-dark table-borderless text-light small">
+                                <thead class="border-bottom border-secondary text-muted">
+                                    <tr>
+                                        <th>Substance (ZDHC MRSL v3)</th>
+                                        <th class="text-end">Result / Limit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for detail in audit.chemical_audit.details %}
+                                    <tr>
+                                        <td>
+                                            {% if detail.status == 'PASSED' %}
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            {% else %}
+                                                <i class="bi bi-x-circle-fill text-danger me-2"></i>
+                                            {% endif %}
+                                            {{ detail.chemical }}
+                                        </td>
+                                        <td class="text-end font-monospace">
+                                            <span class="{% if detail.status == 'FAILED' %}text-danger fw-bold{% else %}text-muted{% endif %}">{{ detail.detected_ppm }}</span> / {{ detail.limit_ppm }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mt-3 text-muted small"><i class="bi bi-info-circle"></i> Evaluated against ZDHC MRSL v3 guidelines.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mt-5 pt-3 border-top border-secondary text-center">
+                <p class="small text-muted mb-0">This document was algorithmically verified by the EcoThread backend.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

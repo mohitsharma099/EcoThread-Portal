@@ -1,0 +1,160 @@
+/* 
+    EcoThread Industrial SaaS Theme
+    Concept: Cyber-Industrial / Modern Web App
+*/
+
+:root {
+    --bg-dark: #0a0e17;
+    --bg-glass: rgba(22, 28, 45, 0.65);
+    --bg-glass-hover: rgba(30, 38, 56, 0.8);
+    
+    --accent: #00ffd5;      /* Cyan/Teal - Industrial Neon */
+    --accent-hover: #00cca$aa;
+    
+    --text-primary: #e0e6ed;
+    --text-secondary: #8c9baf;
+    
+    --danger: #ff4a4a;
+    --success: #00ff8c;
+    
+    --border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.bg-dark-industrial {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* Subtle industrial grid background */
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.brand-font {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+}
+
+.text-accent { color: var(--accent) !important; }
+.bg-glass { background-color: var(--bg-glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+/* Glassmorphic Cards */
+.glass-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Forms & Inputs */
+.industrial-input {
+    background-color: rgba(0,0,0,0.3) !important;
+    border: 1px solid var(--border-color) !important;
+    color: #fff !important;
+}
+.industrial-input:focus {
+    background-color: rgba(0,0,0,0.5) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 0.25rem rgba(0, 255, 213, 0.15) !important;
+}
+
+/* Buttons */
+.btn-accent {
+    background-color: var(--accent);
+    color: #000;
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-accent:hover {
+    background-color: #00cca$aa;  /* Slightly darker neon */
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 213, 0.4);
+}
+.btn-outline-accent {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.btn-outline-accent:hover {
+    background-color: var(--accent);
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 213, 0.4);
+}
+.shadow-accent { box-shadow: 0 0 20px rgba(0, 255, 213, 0.2); }
+.shadow-success { box-shadow: 0 0 10px rgba(0, 255, 140, 0.3); }
+.shadow-danger { box-shadow: 0 0 10px rgba(255, 74, 74, 0.3); }
+
+/* Main Content Wrapper */
+.main-content-wrapper { flex: 1; }
+
+/* Tables */
+.industrial-table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255,255,255,0.02);
+    border-collapse: separate;
+    border-spacing: 0 .5rem;
+}
+.industrial-table tbody tr {
+    background-color: rgba(255,255,255,0.02);
+    transition: all 0.2s;
+}
+.industrial-table tbody tr:hover {
+    background-color: rgba(255,255,255,0.06);
+    transform: scale(1.002);
+}
+.industrial-table td {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+.industrial-table td:first-child { border-left: 1px solid var(--border-color); border-radius: 8px 0 0 8px; }
+.industrial-table td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 8px 8px 0; }
+
+/* Utilities */
+.border-left-accent { border-left: 4px solid var(--accent); }
+.border-left-success { border-left: 4px solid var(--success); }
+.border-left-danger { border-left: 4px solid var(--danger); }
+
+.bg-success-subtle { background-color: rgba(0, 255, 140, 0.1) !important; }
+.bg-danger-subtle { background-color: rgba(255, 74, 74, 0.1) !important; }
+
+/* Hover effects */
+.form-hover-row:hover { background-color: rgba(255,255,255,0.05); }
+
+/* Scrollbar Customization */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-anim { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.slide-down-anim { animation: slideDown 0.5s ease forwards; }
+
+/* Print Styles */
+@media print {
+    body { background: white !important; color: black !important; }
+    .glass-card { box-shadow: none !important; border: 1px solid #ccc !important; }
+    .text-light, .text-white { color: black !important; }
+    .btn, nav, footer, .bi-arrow-left { display: none !important; }
+    .bg-dark-industrial { background-image: none !important; }
+}

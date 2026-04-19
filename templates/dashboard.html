@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row mb-4 align-items-center fade-in-anim">
+    <div class="col-md-8">
+        <h1 class="brand-font">Compliance <span class="text-accent">Overview</span></h1>
+        <p class="text-muted">Real-time metrics for chemical safety and environmental footprints.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a href="{{ url_for('audit_form') }}" class="btn btn-accent"><i class="bi bi-plus-lg"></i> Run New Audit</a>
+    </div>
+</div>
+
+<!-- Key Metrics Row -->
+<div class="row g-4 mb-5 fade-in-anim" style="animation-delay: 0.1s;">
+    <div class="col-md-4">
+        <div class="glass-card stat-card p-4 border-left-success">
+            <h6 class="text-uppercase text-muted fw-bold">Certified Batches</h6>
+            <h2 class="display-5 fw-bold text-success">{{ certified }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card stat-card p-4 border-left-danger">
+            <h6 class="text-uppercase text-muted fw-bold">High Risk Batches</h6>
+            <h2 class="display-5 fw-bold text-danger">{{ risk }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card stat-card p-4 border-left-accent">
+            <h6 class="text-uppercase text-muted fw-bold">Total Audits</h6>
+            <h2 class="display-5 fw-bold text-accent">{{ total }}</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Audits Table -->
+<div class="row fade-in-anim" style="animation-delay: 0.2s;">
+    <div class="col-12">
+        <div class="glass-card p-4">
+            <h4 class="mb-4 brand-font"><i class="bi bi-table text-accent"></i> Recent Audit Log</h4>
+            {% if total == 0 %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                    <p class="mt-3 text-muted">No audits found. Run a new audit to generate data.</p>
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover industrial-table align-middle">
+                        <thead>
+                            <tr class="text-secondary text-uppercase small">
+                                <th>Timestamp</th>
+                                <th>Audit ID</th>
+                                <th>Fiber Type</th>
+                                <th>Volume</th>
+                                <th>Water Impact (L)</th>
+                                <th>Overall Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for audit in audits %}
+                            <tr>
+                                <td>{{ audit.timestamp }}</td>
+                                <td class="font-monospace text-muted">{{ audit.id[:8] }}</td>
+                                <td>{{ audit.fiber }}</td>
+                                <td>{{ audit.volume_kg }} kg</td>
+                                <td>{{ audit.footprint.water_metrics.total_liters }} L</td>
+                                <td>
+                                    {% if audit.overall_status == 'Eco-Certified' %}
+                                        <span class="badge bg-success shadow-success"><i class="bi bi-shield-check"></i> {{ audit.overall_status }}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger shadow-danger"><i class="bi bi-shield-x"></i> {{ audit.overall_status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('generate_report', audit_id=audit.id) }}" class="btn btn-sm btn-outline-light"><i class="bi bi-file-earmark-text"></i> View</a>
+                                    <a href="{{ url_for('download_txt_report', audit_id=audit.id) }}" class="btn btn-sm btn-outline-accent ms-1"><i class="bi bi-download"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
